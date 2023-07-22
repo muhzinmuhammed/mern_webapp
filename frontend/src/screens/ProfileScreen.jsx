@@ -1,18 +1,16 @@
-// ProfileScreen.js
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useUpdateUserMutation } from "../slices/userApiSlice";
-import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
 import FormContainer from "../components/FormContainer";
 import { Form, Button } from "react-bootstrap";
 
 const ProfileScreen = () => {
-  const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
   const [name, setName] = useState(userInfo.name);
   const [email, setEmail] = useState(userInfo.email);
+  const [image, setImage] = useState(null); // Change to null initially
   const [password, setPassword] = useState("");
   const [repassword, setRePassword] = useState("");
   const [updateProfile, { isLoading }] = useUpdateUserMutation();
@@ -20,7 +18,15 @@ const ProfileScreen = () => {
   useEffect(() => {
     setName(userInfo.name);
     setEmail(userInfo.email);
+    setImage(null); // Set to null initially, so we don't use URL.createObjectURL
   }, [userInfo]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file); // Set the actual File object in the state
+    }
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -29,13 +35,18 @@ const ProfileScreen = () => {
       toast.error("Passwords do not match");
     } else {
       try {
-        const res = await updateProfile({
-          _id: userInfo._id,
-          name,
-          email,
-          password,
-        }).unwrap();
-        console.log(res, "haaai");
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("password", password);
+        formData.append("repassword", repassword);
+        if (image) {
+          formData.append("image", image);
+        }
+
+        const res = await updateProfile(formData).unwrap();
+        
+
         // dispatch(setCredentials({ ...res }));
 
         toast.success("Profile updated");
@@ -66,6 +77,22 @@ const ProfileScreen = () => {
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+          />
+        </Form.Group>
+
+        <img
+          alt="Profile Picture"
+          width="200px"
+          height="200px"
+          src={image ? URL.createObjectURL(image) : ""}
+        />
+
+        <Form.Group controlId="image">
+          <Form.Label>Image</Form.Label>
+          <Form.Control
+            type="file"
+            placeholder="Upload photo"
+            onChange={handleImageChange}
           />
         </Form.Group>
 

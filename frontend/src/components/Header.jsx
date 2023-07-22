@@ -4,12 +4,16 @@ import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 
+
+
 import { useLogoutMutation } from '../slices/userApiSlice';
 import { logout } from '../slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 
+
 const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
+  console.log(userInfo,"jak");
   const dispatch=useDispatch()
 
   const [logOutApiCall]=useLogoutMutation()
@@ -47,6 +51,7 @@ const Header = () => {
             <Nav className='ms-auto'>
               {userInfo ? (
                 <>
+                <img src={"../../../uploads/"+ userInfo.image[0]}  />
                   <NavDropdown title={userInfo.name} id='username'>
                     <LinkContainer to='/profile'>
                       <NavDropdown.Item>Profile</NavDropdown.Item>

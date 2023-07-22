@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler"
 import { notfound } from "../middleware/errorMiddleware.js"
-import jwt from 'jsonwebtoken'
+import fs from 'fs'
+
 
 import generateToken from "../utils/genarateToken.js"
 
@@ -22,6 +23,7 @@ const authUser = asyncHandler(async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        image:user.image,
         token
       });
     
@@ -51,6 +53,7 @@ const registerUser=asyncHandler (async(req,res)=>{
         _id:user._id,
         name:user.name,
         email:user.email,
+        image:user.image,
         token
     })
     
@@ -80,13 +83,33 @@ const getUserProfile=asyncHandler (async(req,res)=>{
 const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   
+  let new_image = "";
+  if (req.file) {
+    new_image = req.file.filename;
+    try {
+      fs.unlinkSync("./uploads/" + req.body.image); // Delete the old image file
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    new_image = req.body.image;
+  }
+
+ 
 
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
+    user.image=new_image||user.image
 
     if (req.body.password) {
       user.password = req.body.password;
+    }
+
+    // Check if a new photo is uploaded
+    if (req.file) {
+      // Assuming your User model has a field named "photo"
+      user.photo = req.file.path; // Update the photo field with the file path
     }
 
     const updatedUser = await user.save();
@@ -95,20 +118,23 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
+      photo: updatedUser.photo, // You can include the photo field in the response
     });
   } else {
     res.status(400);
-    throw new Error('Invalid user data');
+    throw new Error("Invalid user data");
   }
 });
+
   
 
   const adminView = asyncHandler(async (req, res) => {
     try {
      
-      const usss = await User.find().exec();
+      const user = await User.find().exec();
+      console.log(user,"kk");
       
-      res.status(200).json(usss);
+      res.status(200).json(user);
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });
