@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useUpdateUserMutation } from "../slices/userApiSlice";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
 import FormContainer from "../components/FormContainer";
 import { Form, Button } from "react-bootstrap";
+import { setCredentials } from "../slices/authSlice";
 
 const ProfileScreen = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -14,12 +15,14 @@ const ProfileScreen = () => {
   const [password, setPassword] = useState("");
   const [repassword, setRePassword] = useState("");
   const [updateProfile, { isLoading }] = useUpdateUserMutation();
+  const dispatch=useDispatch()
 
   useEffect(() => {
     setName(userInfo.name);
     setEmail(userInfo.email);
     setImage(null); // Set to null initially, so we don't use URL.createObjectURL
   }, [userInfo]);
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -45,6 +48,7 @@ const ProfileScreen = () => {
         }
 
         const res = await updateProfile(formData).unwrap();
+        dispatch(setCredentials({ ...userInfo, name, email }));
         
 
         // dispatch(setCredentials({ ...res }));

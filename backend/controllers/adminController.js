@@ -6,6 +6,7 @@ import fs from 'fs'
 import generateToken from "../utils/genarateToken.js"
 
 import User from "../models/userModel.js"
+import admin from "../models/adminModel.js"
 
 const registerUser=asyncHandler (async(req,res)=>{
     const {name,email,password}=req.body
@@ -42,32 +43,29 @@ const registerUser=asyncHandler (async(req,res)=>{
 
 })
 
-const adminLogin = asyncHandler(async (req, res) => {
-    const email='admin123@gmail.com'
-    const password='123'
-  const name='admin'
-    
-
-  
-   
-  
-    if (email&&password) {
-        let token=   generateToken(password);
-      
-  
-      res.json({
+const adminLogin= asyncHandler(async (req,res)=>{
+  const { email,password}= req.body
+ 
+  const id=12345
+if(email==="admin123@gmail.com" && password==="123"){
+   console.log(password,"ll");
+   const token = generateToken(id)
+   res.status(201).json({
        
-        name,
-        email,
-     
-        token
-      });
     
-    } else {
-      res.status(401);
-      throw new Error('Invalid email or password');
-    }
-  });
+      email,
+      password,
+      token
+      
+   })
+ 
+   
+}else{
+   res.status(400)
+   throw new Error('Invalid userid or password')
+} 
+  
+})
 
 
   

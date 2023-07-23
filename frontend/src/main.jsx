@@ -11,7 +11,8 @@ import store from './store.js'
 import { Provider } from 'react-redux'
 import PrivateRoute from './components/PrivateRoute.jsx'
 import ProfileScreen from './screens/ProfileScreen.jsx'
-import AdminPage from './screens/AdminPage.jsx'
+import AdminPage from './screens/admin/AdminPage.jsx'
+import AdminLogin from './screens/admin/AdminLogin.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -25,7 +26,10 @@ const router=createBrowserRouter(
     <Route  path='/profile' element={<ProfileScreen/>}/>
     </Route>
 
+    
+
     <Route  path='/admin'element={<AdminPage/>}/>
+    <Route  path='/adminlogin'element={<AdminLogin/>}/>
     </Route>
     
   )

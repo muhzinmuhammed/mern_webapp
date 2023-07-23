@@ -3,13 +3,14 @@ import { notfound } from "../middleware/errorMiddleware.js"
 import fs from 'fs'
 
 
+
 import generateToken from "../utils/genarateToken.js"
 
 import User from "../models/userModel.js"
 
 const authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-  
+  console.log("kkk");
     const user = await User.findOne({ email });
 
   
