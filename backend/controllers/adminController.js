@@ -45,7 +45,7 @@ const registerUser=asyncHandler (async(req,res)=>{
 
 const adminLogin= asyncHandler(async (req,res)=>{
   const { email,password}= req.body
- 
+ const name="admin"
   const id=12345
 if(email==="admin123@gmail.com" && password==="123"){
   
@@ -53,7 +53,7 @@ if(email==="admin123@gmail.com" && password==="123"){
    const token = generateToken(id)
    res.status(201).json({
        
-    
+    name,
       email,
       password,
       token

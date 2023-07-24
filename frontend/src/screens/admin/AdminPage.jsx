@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
 import axios from 'axios';
-import { InputGroup, FormControl, Button } from 'react-bootstrap';
+import { InputGroup, FormControl } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const AdminPage = () => {
   const [userData, setUserData] = useState([]);
+ 
+  
   const [searchQuery, setSearchQuery] = useState('');
 
   const deleteUser = async (id) => {
@@ -13,6 +16,7 @@ const AdminPage = () => {
     if (shouldDelete) {
       try {
         await axios.delete(`/api/admin/delete_user/${id}`);
+       
         setUserData((prevUserData) => prevUserData.filter((user) => user._id !== id));
       } catch (error) {
         console.error('Error deleting user:', error);
@@ -48,18 +52,19 @@ const AdminPage = () => {
   return (
     <div>
       <h2>User Table</h2>
-      <InputGroup className="mb-3">
+      
+      <InputGroup className="mb-5">
         <FormControl
           placeholder="Search..."
           value={searchQuery}
           onChange={handleSearch}
         />
-        <Button variant="outline-secondary">Search</Button>
+        
       </InputGroup>
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>#</th>
+            <th> #</th>
             <th>Name</th>
             <th>Email</th>
             <th>Action</th>
@@ -78,6 +83,9 @@ const AdminPage = () => {
           ))}
         </tbody>
       </Table>
+      <button className='btn btn-dark'>
+      <Link to='/admin_adduser'>Add User</Link>
+    </button>
     </div>
   );
 };

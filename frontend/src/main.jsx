@@ -13,7 +13,8 @@ import PrivateRoute from './components/PrivateRoute.jsx'
 import ProfileScreen from './screens/ProfileScreen.jsx'
 import AdminPage from './screens/admin/AdminPage.jsx'
 import AdminLogin from './screens/admin/AdminLogin.jsx'
-import AdminPrivateRoute from './components/adminPrivate.jsx'
+
+import Adminadduser from './screens/admin/Adminadduser.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -28,9 +29,8 @@ const router=createBrowserRouter(
     </Route>
 
     
-    <Route  path='' element={<AdminPrivateRoute/>}>
     <Route  path='/admin'element={<AdminPage/>}/>
-    </Route>
+    <Route  path='/admin_adduser'element={<Adminadduser/>}/>
     <Route  path='/adminlogin'element={<AdminLogin/>}/>
     </Route>
     
