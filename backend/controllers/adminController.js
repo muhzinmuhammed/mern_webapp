@@ -48,6 +48,7 @@ const adminLogin= asyncHandler(async (req,res)=>{
  
   const id=12345
 if(email==="admin123@gmail.com" && password==="123"){
+  
    console.log(password,"ll");
    const token = generateToken(id)
    res.status(201).json({

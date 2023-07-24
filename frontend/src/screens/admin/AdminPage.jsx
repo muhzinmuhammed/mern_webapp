@@ -20,6 +20,8 @@ const AdminPage = () => {
     }
   };
 
+  
+
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
