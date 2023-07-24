@@ -100,23 +100,10 @@ if(email==="admin123@gmail.com" && password==="123"){
     }
   });
   
- const searchAdminUser = (req, res) => {
-    const query = req.query.name // Get the search query from the URL query parameters
-  
-    // Perform the search using Mongoose
-    User
-      .find({ name: { $regex: new RegExp(query, 'i') } })
-      .then((user_data) => {
-        res.status(200).json(user_data)
-      })
-      .catch((err) => {
-        console.error(err)
-        res.status(500).send('Internal Server Error')
-      })
-  }
+ 
   
 
   
   
 
-export {adminView,adminLogin,registerUser,userDelete,searchAdminUser}
+export {adminView,adminLogin,registerUser,userDelete}
